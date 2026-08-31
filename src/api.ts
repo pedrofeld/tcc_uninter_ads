@@ -2,10 +2,10 @@ import express = require("express");
 import cors = require("cors");
 import * as dotenv from "dotenv";
 
-const app = express();
+const api = express();
 
-app.use(express.json());
-app.use(cors());
+api.use(express.json());
+api.use(cors());
 /* 
     It would be necessary to configure CORS to accept requests only from the front-end domain, because it is a browser restriction. It does not affect Postman or other API testing tools.
     Exemple:
@@ -15,12 +15,12 @@ app.use(cors());
 */
 dotenv.config();
 
-app.use(
+api.use(
   // routes here
 );
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+api.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
