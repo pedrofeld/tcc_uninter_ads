@@ -50,7 +50,7 @@ model User {
   projects Project[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("users")
 }
