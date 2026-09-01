@@ -1,21 +1,116 @@
-// use prisma-next
-
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String?
-  name      String?
-  posts     Post[]
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+enum ERole {
+  VISIONARY
+  INVESTOR
+  ADMIN
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+enum EInvestorType {
+  INDIVIDUAL
+  COMPANY
+}
+
+enum EProjectStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum EProjectSector {
+  TECH
+  HEALTH
+  EDUCATION
+  ENVIRONMENT
+  SOCIAL
+  OTHER
+}
+
+enum ETypeOfSupportSought {
+  FINANCIAL
+  MENTORSHIP
+  PARTNERSHIP
+  EQUIPMENT
+  TECHNOLOGICAL
+  PROMOTION
+  SPACE
+  OTHER
+}
+
+model User {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  passwordHash  String
+  role      ERole
+  city String
+  state String
+
+  visionary Visionary?
+  investor Investor?
+  projects Project[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("users")
+}
+
+model Visionary {
+  id String @id @default(uuid())
+  userId String @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profession String?
+  studyArea String?
+  biography String?
+  phoneNumber String?
+  linkedIn String?
+
+  @@map("visionarys")
+}
+
+model Investor {
+  id String @id @default(uuid())
+  userId String @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  investorType EInvestorType
+  companyName String?
+  position String?
+  companyWebsite String?
+  biography String?
+  phoneNumber String?
+  linkedIn String?
+
+  @@map("investors")
+}
+
+model Project {
+  id        String      @id @default(uuid())
+  name      String
+  resume    String
+  description String
+  sector    EProjectSector
+  obstacles String
+  typesOfSupportSought ProjectSupport[]
+  city String
+  state String
+  status EProjectStatus @default(DRAFT)
+  projectImageUrl String?
+
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  publishedAt DateTime? @default(now())
+
+  @@map("projects")
+}
+
+model ProjectSupport {
+  projectId String
+  type      ETypeOfSupportSought
+  project   Project              @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, type])
+  @@map("project_supports")
 }
