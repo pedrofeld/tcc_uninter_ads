@@ -22,18 +22,21 @@ export class UserRepository {
     }
 
     public async create(data: UserDTO) {
-        const passwordHash = await bcrypt.hash(data.password, 12);
-
-        return db.orm.public.User
-            .select('id', 'firstName', 'lastName', 'email', 'role', 'city', 'state', 'createdAt', 'updatedAt')
-            .create({
-                firstName: data.firstName,
-                lastName: data.lastName,
-                email: data.email,
-                passwordHash,
-                role: data.role,
-                city: data.city,
-                state: data.state,
-            });
+        try {
+            const passwordHash = await bcrypt.hash(data.password, 12);
+            return db.orm.public.User
+                .select('id', 'firstName', 'lastName', 'email', 'role', 'city', 'state', 'createdAt', 'updatedAt')
+                .create({
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    email: data.email,
+                    passwordHash,
+                    role: data.role,
+                    city: data.city,
+                    state: data.state,
+                });
+        } catch (error: any) {
+            return error.message;
+        }
     }
 }
