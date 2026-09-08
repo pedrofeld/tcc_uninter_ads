@@ -26,7 +26,6 @@ export class ProjectRepository {
                 const project = await tx.orm.public.Project
                     .select('id', 'name', 'resume', 'description', 'sector', 'obstacles', 'city', 'state', 'status', 'projectImageUrl')
                     .create({
-                        userId: data.userId,
                         name: data.name,
                         resume: data.resume,
                         description: data.description,

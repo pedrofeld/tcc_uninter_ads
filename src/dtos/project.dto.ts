@@ -1,5 +1,4 @@
 export interface ProjectDTO {
-    userId: string;
     name: string;
     resume: string;
     description: string;
