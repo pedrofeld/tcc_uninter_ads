@@ -125,12 +125,12 @@
                 "value": "EQUIPMENT"
               },
               {
-                "name": "TECNOLOGICAL",
-                "value": "TECNOLOGICAL"
+                "name": "TECHNOLOGICAL",
+                "value": "TECHNOLOGICAL"
               },
               {
-                "name": "DIVULGATION",
-                "value": "DIVULGATION"
+                "name": "PROMOTION",
+                "value": "PROMOTION"
               },
               {
                 "name": "SPACE",
@@ -319,7 +319,7 @@
                 }
               },
               "publishedAt": {
-                "nullable": false,
+                "nullable": true,
                 "type": {
                   "codecId": "pg/timestamptz-temporal@1",
                   "kind": "scalar"
@@ -880,8 +880,8 @@
             "project_supports": {
               "checks": [
                 {
-                  "expression": "\"type\" IN ('FINANCIAL', 'MENTORSHIP', 'PARTNERSHIP', 'EQUIPMENT', 'TECNOLOGICAL', 'DIVULGATION', 'SPACE', 'OTHER')",
-                  "name": "project_supports_type_check_db98e630",
+                  "expression": "\"type\" IN ('FINANCIAL', 'MENTORSHIP', 'PARTNERSHIP', 'EQUIPMENT', 'TECHNOLOGICAL', 'PROMOTION', 'SPACE', 'OTHER')",
+                  "name": "project_supports_type_check_1240135c",
                   "prefix": "project_supports_type_check"
                 }
               ],
@@ -1000,7 +1000,7 @@
                     "kind": "function"
                   },
                   "nativeType": "timestamptz",
-                  "nullable": false
+                  "nullable": true
                 },
                 "resume": {
                   "codecId": "pg/text@1",
@@ -1040,10 +1040,6 @@
                 },
                 "updatedAt": {
                   "codecId": "pg/timestamptz-temporal@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
@@ -1155,10 +1151,6 @@
                 },
                 "updatedAt": {
                   "codecId": "pg/timestamptz-temporal@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
                   "nativeType": "timestamptz",
                   "nullable": false
                 }
@@ -1292,8 +1284,8 @@
                 "MENTORSHIP",
                 "PARTNERSHIP",
                 "EQUIPMENT",
-                "TECNOLOGICAL",
-                "DIVULGATION",
+                "TECHNOLOGICAL",
+                "PROMOTION",
                 "SPACE",
                 "OTHER"
               ]
@@ -1304,10 +1296,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "beffe4e1daca9c958606a5c2cfa2fd5c64210b66007929ddf96908021b0d9cc8"
+    "storageHash": "2585c4ff654852c2ab66b053dd24227c7b6e73fe92c4345bd1f8d87efdb97feb"
   },
   "execution": {
-    "executionHash": "bf73c806839a879a153c1b2bf752f0177f6211b3098f7482dc7d8537ca71a3d9",
+    "executionHash": "c0bb3eff10b23865c8b25c52db7a4aa52793368e54acf9d22cad574fc8983d6d",
     "mutations": {
       "defaults": [
         {
@@ -1334,11 +1326,41 @@
         },
         {
           "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
+            "namespace": "public",
+            "table": "projects"
+          }
+        },
+        {
+          "onCreate": {
             "id": "uuidv4",
             "kind": "generator"
           },
           "ref": {
             "column": "id",
+            "namespace": "public",
+            "table": "users"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
             "namespace": "public",
             "table": "users"
           }

@@ -33,9 +33,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'beffe4e1daca9c958606a5c2cfa2fd5c64210b66007929ddf96908021b0d9cc8'>;
+  StorageHashBase<'2585c4ff654852c2ab66b053dd24227c7b6e73fe92c4345bd1f8d87efdb97feb'>;
 export type ExecutionHash =
-  ExecutionHashBase<'bf73c806839a879a153c1b2bf752f0177f6211b3098f7482dc7d8537ca71a3d9'>;
+  ExecutionHashBase<'c0bb3eff10b23865c8b25c52db7a4aa52793368e54acf9d22cad574fc8983d6d'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -266,7 +266,7 @@ export type FieldOutputTypes = {
       readonly userId: CodecTypes['pg/text@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-      readonly publishedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly publishedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     };
     readonly ProjectSupport: {
       readonly projectId: CodecTypes['pg/text@1']['output'];
@@ -275,8 +275,8 @@ export type FieldOutputTypes = {
         | 'MENTORSHIP'
         | 'PARTNERSHIP'
         | 'EQUIPMENT'
-        | 'TECNOLOGICAL'
-        | 'DIVULGATION'
+        | 'TECHNOLOGICAL'
+        | 'PROMOTION'
         | 'SPACE'
         | 'OTHER';
     };
@@ -330,7 +330,7 @@ export type FieldInputTypes = {
       readonly userId: CodecTypes['pg/text@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-      readonly publishedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly publishedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
     };
     readonly ProjectSupport: {
       readonly projectId: CodecTypes['pg/text@1']['input'];
@@ -339,8 +339,8 @@ export type FieldInputTypes = {
         | 'MENTORSHIP'
         | 'PARTNERSHIP'
         | 'EQUIPMENT'
-        | 'TECNOLOGICAL'
-        | 'DIVULGATION'
+        | 'TECHNOLOGICAL'
+        | 'PROMOTION'
         | 'SPACE'
         | 'OTHER';
     };
@@ -387,8 +387,8 @@ export type StorageColumnTypes = {
         | 'MENTORSHIP'
         | 'PARTNERSHIP'
         | 'EQUIPMENT'
-        | 'TECNOLOGICAL'
-        | 'DIVULGATION'
+        | 'TECHNOLOGICAL'
+        | 'PROMOTION'
         | 'SPACE'
         | 'OTHER';
     };
@@ -400,7 +400,7 @@ export type StorageColumnTypes = {
       readonly name: CodecTypes['pg/text@1']['output'];
       readonly obstacles: CodecTypes['pg/text@1']['output'];
       readonly projectImageUrl: CodecTypes['pg/text@1']['output'] | null;
-      readonly publishedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly publishedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly resume: CodecTypes['pg/text@1']['output'];
       readonly sector: 'TECH' | 'HEALTH' | 'EDUCATION' | 'ENVIRONMENT' | 'SOCIAL' | 'OTHER';
       readonly state: CodecTypes['pg/text@1']['output'];
@@ -451,8 +451,8 @@ export type StorageColumnInputTypes = {
         | 'MENTORSHIP'
         | 'PARTNERSHIP'
         | 'EQUIPMENT'
-        | 'TECNOLOGICAL'
-        | 'DIVULGATION'
+        | 'TECHNOLOGICAL'
+        | 'PROMOTION'
         | 'SPACE'
         | 'OTHER';
     };
@@ -464,7 +464,7 @@ export type StorageColumnInputTypes = {
       readonly name: CodecTypes['pg/text@1']['input'];
       readonly obstacles: CodecTypes['pg/text@1']['input'];
       readonly projectImageUrl: CodecTypes['pg/text@1']['input'] | null;
-      readonly publishedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly publishedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly resume: CodecTypes['pg/text@1']['input'];
       readonly sector: 'TECH' | 'HEALTH' | 'EDUCATION' | 'ENVIRONMENT' | 'SOCIAL' | 'OTHER';
       readonly state: CodecTypes['pg/text@1']['input'];
@@ -688,12 +688,11 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: false;
-                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly publishedAt: {
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-temporal@1';
-                  readonly nullable: false;
+                  readonly nullable: true;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
               };
@@ -774,7 +773,6 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: false;
-                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
               };
               primaryKey: { readonly columns: readonly ['id'] };
@@ -870,8 +868,8 @@ type ContractBase = Omit<
                 'MENTORSHIP',
                 'PARTNERSHIP',
                 'EQUIPMENT',
-                'TECNOLOGICAL',
-                'DIVULGATION',
+                'TECHNOLOGICAL',
+                'PROMOTION',
                 'SPACE',
                 'OTHER',
               ];
@@ -1029,7 +1027,7 @@ type ContractBase = Omit<
                 };
               };
               readonly publishedAt: {
-                readonly nullable: false;
+                readonly nullable: true;
                 readonly type: {
                   readonly kind: 'scalar';
                   readonly codecId: 'pg/timestamptz-temporal@1';
@@ -1310,8 +1308,8 @@ type ContractBase = Omit<
               { readonly name: 'MENTORSHIP'; readonly value: 'MENTORSHIP' },
               { readonly name: 'PARTNERSHIP'; readonly value: 'PARTNERSHIP' },
               { readonly name: 'EQUIPMENT'; readonly value: 'EQUIPMENT' },
-              { readonly name: 'TECNOLOGICAL'; readonly value: 'TECNOLOGICAL' },
-              { readonly name: 'DIVULGATION'; readonly value: 'DIVULGATION' },
+              { readonly name: 'TECHNOLOGICAL'; readonly value: 'TECHNOLOGICAL' },
+              { readonly name: 'PROMOTION'; readonly value: 'PROMOTION' },
               { readonly name: 'SPACE'; readonly value: 'SPACE' },
               { readonly name: 'OTHER'; readonly value: 'OTHER' },
             ];
@@ -1362,10 +1360,28 @@ type ContractBase = Omit<
         {
           readonly ref: {
             readonly namespace: 'public';
+            readonly table: 'projects';
+            readonly column: 'updatedAt';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
             readonly table: 'users';
             readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'users';
+            readonly column: 'updatedAt';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
         },
         {
           readonly ref: {
