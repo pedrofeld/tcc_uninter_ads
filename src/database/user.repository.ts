@@ -161,4 +161,29 @@ export class UserRepository {
             return error.message;
         }
     }
+
+    public async delete(id: string) {
+        try {
+            return db.transaction(async (tx) => {
+                const user = await tx.orm.public.User.first({id});
+                if (!user) {
+                    throw new Error('User not found');
+                }
+
+                if (user.role === 'VISIONARY') {
+                    await tx.orm.public.Visionary.where({userId: id}).delete();
+                }
+
+                if (user.role === 'INVESTOR') {
+                    await tx.orm.public.Investor.where({userId: id}).delete();
+                }
+
+                await tx.orm.public.User.where({id}).delete();
+
+                return {message: 'User deleted successfully'};
+            });
+        } catch (error: any) {
+            return error.message;
+        }
+    }
 }
