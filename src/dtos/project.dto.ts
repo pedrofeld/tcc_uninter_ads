@@ -1,12 +1,13 @@
 export interface ProjectDTO {
+    userId: string;
     name: string;
     resume: string;
     description: string;
-    sector: 'TECHNOLOGY' | 'HEALTHCARE' | 'EDUCATION' | 'ENERGY' | 'AGRICULTURE' | 'FINANCE' | 'ENTERTAINMENT' | 'OTHER';
+    sector: 'TECH' | 'HEALTH' | 'EDUCATION' | 'ENVIRONMENT' | 'SOCIAL' | 'OTHER';
     obstacles: string;
-    typesOfSupportSought: ('FINANCIAL' | 'MENTORSHIP' | 'PARTNERSHIP' | 'OTHER')[];
+    typesOfSupportSought: ('FINANCIAL' | 'MENTORSHIP' | 'PARTNERSHIP' | 'EQUIPMENT' | 'TECHNOLOGICAL' | 'PROMOTION' | 'SPACE' | 'OTHER')[];
     city: string;
     state: string;
-    status?: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
+    status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
     projectImageUrl?: string;
 }
