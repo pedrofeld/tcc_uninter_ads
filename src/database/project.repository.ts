@@ -90,4 +90,22 @@ export class ProjectRepository {
             return error.message;
         }
     }
+
+    public async delete(id: string) {
+        try {
+            return db.transaction(async (tx) => {
+                await tx.orm.public.ProjectSupport
+                    .where({projectId: id})
+                    .delete();
+                    
+                const project = await tx.orm.public.Project
+                    .where({id})
+                    .delete();
+                    
+                return project;
+            });
+        } catch (error: any) {
+            return error.message;
+        }
+    }
 }
