@@ -52,4 +52,42 @@ export class ProjectRepository {
             return error.message;
         }
     }
+
+    public async update(id: string, data: ProjectDTO) {
+        try {
+            return db.transaction(async (tx) => {
+                const project = await tx.orm.public.Project
+                    .where({id})
+                    .select('id', 'name', 'resume', 'description', 'sector', 'obstacles', 'city', 'state', 'status', 'projectImageUrl')
+                    .update({
+                        name: data.name,
+                        resume: data.resume,
+                        description: data.description,
+                        sector: data.sector,
+                        obstacles: data.obstacles,
+                        city: data.city,
+                        state: data.state,
+                        status: data.status ?? 'DRAFT',
+                        projectImageUrl: data.projectImageUrl ?? null,
+                    });
+
+                const typesOfSupportSought = [...new Set(data.typesOfSupportSought)];
+
+                await tx.orm.public.ProjectSupport
+                    .where({projectId: id})
+                    .delete();
+
+                for (const type of typesOfSupportSought) {
+                    await tx.orm.public.ProjectSupport.create({
+                        projectId: id,
+                        type,
+                    });
+                }
+
+                return {...project, typesOfSupportSought};
+            });
+        } catch (error: any) {
+            return error.message;
+        }
+    }
 }
