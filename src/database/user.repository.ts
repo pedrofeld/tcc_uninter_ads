@@ -4,27 +4,21 @@ import type { UserDTO } from '../dtos/user.dto';
 
 export class UserRepository {
     public async findAll() {
-        try {
-            const users = await db.orm.public.User.all();
-            return users;
-        } catch (error: any) {
-            return error.message;
-        }
+        return db.orm.public.User
+            .select('id', 'firstName', 'lastName', 'email', 'role', 'city', 'state', 'createdAt', 'updatedAt')
+            .all();
     }
 
     public async findById(id: string) {
-        try {
-            const user = await db.orm.public.User.first({id});
-            return user;
-        } catch (error: any) {
-            return error.message;
-        }
+        return db.orm.public.User
+            .where({id})
+            .select('id', 'firstName', 'lastName', 'email', 'role', 'city', 'state', 'createdAt', 'updatedAt')
+            .first();
     }
 
     public async create(data: UserDTO) {
-        try {
-            const passwordHash = await bcrypt.hash(data.password, 12);
-            return db.transaction(async (tx) => {
+        const passwordHash = await bcrypt.hash(data.password, 12);
+        return db.transaction(async (tx) => {
                 const user = await tx.orm.public.User
                     .select('id', 'firstName', 'lastName', 'email', 'role', 'city', 'state', 'createdAt', 'updatedAt')
                     .create({
@@ -74,16 +68,12 @@ export class UserRepository {
                 }
 
                 return user;
-            });
-        } catch (error: any) {
-            return error.message;
-        }
+        });
     }
 
     public async update(id: string, data: UserDTO) {
-        try {
-            const passwordHash = await bcrypt.hash(data.password, 12);
-            return db.transaction(async (tx) => {
+        const passwordHash = await bcrypt.hash(data.password, 12);
+        return db.transaction(async (tx) => {
                 const user = await tx.orm.public.User
                     .where({id})
                     .select('id', 'firstName', 'lastName', 'email', 'role', 'city', 'state', 'createdAt', 'updatedAt')
@@ -98,6 +88,7 @@ export class UserRepository {
                     });
 
                 if (data.role === 'VISIONARY') {
+                    await tx.orm.public.Investor.where({userId: id}).delete();
                     const visionary = await tx.orm.public.Visionary
                         .where({userId: id})
                         .select('profession', 'studyArea', 'biography', 'phoneNumber', 'linkedIn')
@@ -127,6 +118,7 @@ export class UserRepository {
                         throw new Error('investorType is required for investors');
                     }
 
+                    await tx.orm.public.Visionary.where({userId: id}).delete();
                     const investor = await tx.orm.public.Investor
                         .where({userId: id})
                         .select('investorType', 'companyName', 'position', 'companyWebsite', 'biography', 'phoneNumber', 'linkedIn')
@@ -155,16 +147,14 @@ export class UserRepository {
                     return {...user, ...investor};
                 }
 
+                await tx.orm.public.Visionary.where({userId: id}).delete();
+                await tx.orm.public.Investor.where({userId: id}).delete();
                 return user;
-            });
-        } catch (error: any) {
-            return error.message;
-        }
+        });
     }
 
     public async delete(id: string) {
-        try {
-            return db.transaction(async (tx) => {
+        return db.transaction(async (tx) => {
                 const user = await tx.orm.public.User.first({id});
                 if (!user) {
                     throw new Error('User not found');
@@ -181,9 +171,6 @@ export class UserRepository {
                 await tx.orm.public.User.where({id}).delete();
 
                 return {message: 'User deleted successfully'};
-            });
-        } catch (error: any) {
-            return error.message;
-        }
+        });
     }
 }

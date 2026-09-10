@@ -3,29 +3,19 @@ import type { ProjectDTO } from '../dtos/project.dto';
 
 export class ProjectRepository {
     public async findAll() {
-        try {
-            const projects = await db.orm.public.Project.all();
-            return projects;
-        } catch (error: any) {
-            return error.message;
-        }
+        return db.orm.public.Project.all();
     }
 
     public async findById(id: string) {
-        try {
-            const project = await db.orm.public.Project.first({id});
-            return project;
-        } catch (error: any) {
-            return error.message;
-        }
+        return db.orm.public.Project.first({id});
     }
 
     public async create(data: ProjectDTO) {
-        try {
-            return db.transaction(async (tx) => {
+        return db.transaction(async (tx) => {
                 const project = await tx.orm.public.Project
-                    .select('id', 'name', 'resume', 'description', 'sector', 'obstacles', 'city', 'state', 'status', 'projectImageUrl')
+                    .select('id', 'userId', 'name', 'resume', 'description', 'sector', 'obstacles', 'city', 'state', 'status', 'projectImageUrl')
                     .create({
+                        userId: data.userId,
                         name: data.name,
                         resume: data.resume,
                         description: data.description,
@@ -47,19 +37,16 @@ export class ProjectRepository {
                 }
 
                 return {...project, typesOfSupportSought};
-            });
-        } catch (error: any) {
-            return error.message;
-        }
+        });
     }
 
     public async update(id: string, data: ProjectDTO) {
-        try {
-            return db.transaction(async (tx) => {
+        return db.transaction(async (tx) => {
                 const project = await tx.orm.public.Project
                     .where({id})
-                    .select('id', 'name', 'resume', 'description', 'sector', 'obstacles', 'city', 'state', 'status', 'projectImageUrl')
+                    .select('id', 'userId', 'name', 'resume', 'description', 'sector', 'obstacles', 'city', 'state', 'status', 'projectImageUrl')
                     .update({
+                        userId: data.userId,
                         name: data.name,
                         resume: data.resume,
                         description: data.description,
@@ -85,15 +72,11 @@ export class ProjectRepository {
                 }
 
                 return {...project, typesOfSupportSought};
-            });
-        } catch (error: any) {
-            return error.message;
-        }
+        });
     }
 
     public async delete(id: string) {
-        try {
-            return db.transaction(async (tx) => {
+        return db.transaction(async (tx) => {
                 await tx.orm.public.ProjectSupport
                     .where({projectId: id})
                     .delete();
@@ -103,9 +86,6 @@ export class ProjectRepository {
                     .delete();
                     
                 return project;
-            });
-        } catch (error: any) {
-            return error.message;
-        }
+        });
     }
 }
