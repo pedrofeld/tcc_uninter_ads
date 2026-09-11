@@ -4,7 +4,7 @@ import type { ProjectDTO } from '../dtos/project.dto';
 
 export class ProjectService {
     private projectRepository = new ProjectRepository();
-    // private userRepository = new UserRepository();
+    private userRepository = new UserRepository();
     private sectors = ['TECH', 'HEALTH', 'EDUCATION', 'ENVIRONMENT', 'SOCIAL', 'OTHER'];
     private statuses = ['DRAFT', 'PUBLISHED', 'ARCHIVED'];
     private supportTypes = ['FINANCIAL', 'MENTORSHIP', 'PARTNERSHIP', 'EQUIPMENT', 'TECHNOLOGICAL', 'PROMOTION', 'SPACE', 'OTHER'];
@@ -30,6 +30,12 @@ export class ProjectService {
     public async create(data: ProjectDTO) {
         if (!data) {
             throw new Error('Project data is required');
+        }
+
+        const creator = await this.userRepository.findById(data.userId);
+
+        if (!creator) {
+            throw new Error('User not found')
         }
 
         if (!this.sectors.includes(data.sector)) {
@@ -60,6 +66,12 @@ export class ProjectService {
 
         if (!project) {
             throw new Error('Project not found');
+        }
+
+        const creator = await this.userRepository.findById(data.userId);
+
+        if (!creator) {
+            throw new Error('User not found')
         }
 
         if (!this.sectors.includes(data.sector)) {
