@@ -1,20 +1,11 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 
-type ErrorResponse = {
-    statusCode: number;
-    message: string;
-};
-
-export function handleError(error: unknown): ErrorResponse {
+export function handleError(error: unknown) {
     if (error instanceof PrismaClientKnownRequestError) {
-        return {
-            statusCode: 400,
-            message: error.message
-        };
+        console.error(`Erro [${error.code}]: ${error.message}`);
+        return null;
     }
 
-    return {
-        statusCode: 500,
-        message: "Internal server error"
-    };
+    console.log(error);
+    return null;
 }
