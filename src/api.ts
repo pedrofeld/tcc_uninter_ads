@@ -1,8 +1,10 @@
 import express = require("express");
 import cors = require("cors");
 import * as dotenv from "dotenv";
+import { Router } from "express";
 
 const api = express();
+const routes = Router();
 
 api.use(express.json());
 api.use(cors());
@@ -13,11 +15,9 @@ api.use(cors());
         origin: 'https://my-front-end.com'
     }));
 */
-dotenv.config();
+api.use(routes);
 
-api.use(
-  // routes here
-);
+dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
