@@ -1,10 +1,9 @@
 import express = require("express");
 import cors = require("cors");
 import * as dotenv from "dotenv";
-import { Router } from "express";
+import { routes } from "./routes";
 
 const api = express();
-const routes = Router();
 
 api.use(express.json());
 api.use(cors());
