@@ -31,6 +31,21 @@ export class UserService {
         }
     }
 
+    public async findByEmail(email: string) {
+        try {
+            if (!email) {
+                throw new Error('User email is required');
+            }
+            const user = await this.userRepository.findByEmail(email);
+            if (!user) {
+                throw new Error('User not found');
+            }
+            return user;
+        } catch (error: any) {
+            return handleError(error);
+        }
+    }
+
     public async create(data: UserDTO) {
         try {
             if (!data) {

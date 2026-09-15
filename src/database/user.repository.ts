@@ -16,6 +16,13 @@ export class UserRepository {
             .first();
     }
 
+    public async findByEmail(email: string) {
+        return db.orm.public.User
+            .where({email})
+            .select('id', 'firstName', 'lastName', 'email', 'passwordHash', 'role', 'city', 'state', 'createdAt', 'updatedAt')
+            .first();
+    }
+
     public async create(data: UserDTO) {
         const passwordHash = await bcrypt.hash(data.password, 12);
         return db.transaction(async (tx) => {
