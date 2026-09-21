@@ -58,25 +58,25 @@ export class UserService {
     }
 
     public async update(id: string, data: UserDTO) {
-        try {
+        try{
             if (!id){
-                throw new Error('User id is required');
-            }
+            throw new Error('User id is required');
+        }
 
-            if (!data) {
-                throw new Error('User data is required');
-            }
+        if (!data) {
+            throw new Error('User data is required');
+        }
 
-            const user = await this.userRepository.findById(id);
+        const user = await this.userRepository.findById(id);
 
-            if (!user) {
-                throw new Error('User not found');
-            }
+        if (!user) {
+            throw new Error('User not found. User needs to exist to be updated');
+        }
 
-            return this.userRepository.update(id, data);
+        return this.userRepository.update(id, data);
         } catch (error: any) {
             return handleError(error);
-        }
+        }   
     }
 
     public async delete(id: string) {

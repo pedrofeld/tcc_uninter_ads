@@ -96,26 +96,31 @@ export class UserRepository {
 
                 if (data.role === 'VISIONARY') {
                     await tx.orm.public.Investor.where({userId: id}).delete();
-                    const visionary = await tx.orm.public.Visionary
+                    const existingVisionary = await tx.orm.public.Visionary
                         .where({userId: id})
-                        .select('profession', 'studyArea', 'biography', 'phoneNumber', 'linkedIn')
-                        .upsert({
-                            create: {
+                        .first();
+
+                    const visionary = existingVisionary
+                        ? await tx.orm.public.Visionary
+                            .where({userId: id})
+                            .select('profession', 'studyArea', 'biography', 'phoneNumber', 'linkedIn')
+                            .update({
+                                profession: data.profession,
+                                studyArea: data.studyArea,
+                                biography: data.biography,
+                                phoneNumber: data.phoneNumber,
+                                linkedIn: data.linkedIn,
+                            })
+                        : await tx.orm.public.Visionary
+                            .select('profession', 'studyArea', 'biography', 'phoneNumber', 'linkedIn')
+                            .create({
                                 userId: id,
                                 profession: data.profession,
                                 studyArea: data.studyArea,
                                 biography: data.biography,
                                 phoneNumber: data.phoneNumber,
                                 linkedIn: data.linkedIn,
-                            },
-                            update: {
-                                profession: data.profession,
-                                studyArea: data.studyArea,
-                                biography: data.biography,
-                                phoneNumber: data.phoneNumber,
-                                linkedIn: data.linkedIn,
-                            },
-                        });
+                            });
 
                     return {...user, ...visionary};
                 }
@@ -126,11 +131,26 @@ export class UserRepository {
                     }
 
                     await tx.orm.public.Visionary.where({userId: id}).delete();
-                    const investor = await tx.orm.public.Investor
+                    const existingInvestor = await tx.orm.public.Investor
                         .where({userId: id})
-                        .select('investorType', 'companyName', 'position', 'companyWebsite', 'biography', 'phoneNumber', 'linkedIn')
-                        .upsert({
-                            create: {
+                        .first();
+
+                    const investor = existingInvestor
+                        ? await tx.orm.public.Investor
+                            .where({userId: id})
+                            .select('investorType', 'companyName', 'position', 'companyWebsite', 'biography', 'phoneNumber', 'linkedIn')
+                            .update({
+                                investorType: data.investorType,
+                                companyName: data.companyName,
+                                position: data.position,
+                                companyWebsite: data.companyWebsite,
+                                biography: data.biography,
+                                phoneNumber: data.phoneNumber,
+                                linkedIn: data.linkedIn,
+                            })
+                        : await tx.orm.public.Investor
+                            .select('investorType', 'companyName', 'position', 'companyWebsite', 'biography', 'phoneNumber', 'linkedIn')
+                            .create({
                                 userId: id,
                                 investorType: data.investorType,
                                 companyName: data.companyName,
@@ -139,17 +159,7 @@ export class UserRepository {
                                 biography: data.biography,
                                 phoneNumber: data.phoneNumber,
                                 linkedIn: data.linkedIn,
-                            },
-                            update: {
-                                investorType: data.investorType,
-                                companyName: data.companyName,
-                                position: data.position,
-                                companyWebsite: data.companyWebsite,
-                                biography: data.biography,
-                                phoneNumber: data.phoneNumber,
-                                linkedIn: data.linkedIn,
-                            },
-                        });
+                            });
 
                     return {...user, ...investor};
                 }
