@@ -102,7 +102,7 @@ export class ProjectService {
 
             return this.projectRepository.update(id, data);
         } catch (error: any) {
-            return handleError(error);
+            throw error;
         }
     }
 
