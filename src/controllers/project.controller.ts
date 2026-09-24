@@ -1,6 +1,6 @@
 import type {Request, Response} from 'express';
-import type {ProjectDTO} from '../dtos/project.dto';
-import {ProjectService} from '../services/project.service';
+import type {ProjectDTO} from '../dtos/project.dto.js';
+import {ProjectService} from '../services/project.service.js';
 
 export class ProjectController {
     private projectService = new ProjectService();

@@ -1,5 +1,5 @@
-import { db } from '../../prisma/db';
-import type { ProjectDTO } from '../dtos/project.dto';
+import { db } from '../../prisma/db.js';
+import type { ProjectDTO } from '../dtos/project.dto.js';
 
 export class ProjectRepository {
     public async findAll() {

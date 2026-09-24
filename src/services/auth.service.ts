@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt";
-import { UserRepository } from "../database/user.repository";
-import { JwtService } from "./jwt.service";
-import { handleError } from "../config/error.handler";
+import { UserRepository } from "../database/user.repository.js";
+import { JwtService } from "./jwt.service.js";
+import { handleError } from "../config/error.handler.js";
 
 export class AuthService {
   private repo = new UserRepository();

@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
-import { UserRepository } from '../database/user.repository';
-import { handleError } from '../config/error.handler';
-import { JwtService } from '../services/jwt.service';
+import { UserRepository } from '../database/user.repository.js';
+import { handleError } from '../config/error.handler.js';
+import { JwtService } from '../services/jwt.service.js';
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {

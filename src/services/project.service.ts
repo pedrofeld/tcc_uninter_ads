@@ -1,7 +1,7 @@
-import { handleError } from '../config/error.handler';
-import { ProjectRepository } from '../database/project.repository';
-import { UserRepository } from '../database/user.repository';
-import type { ProjectDTO } from '../dtos/project.dto';
+import { handleError } from '../config/error.handler.js';
+import { ProjectRepository } from '../database/project.repository.js';
+import { UserRepository } from '../database/user.repository.js';
+import type { ProjectDTO } from '../dtos/project.dto.js';
 
 export class ProjectService {
     private projectRepository = new ProjectRepository();

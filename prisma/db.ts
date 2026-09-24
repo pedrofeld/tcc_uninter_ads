@@ -4,7 +4,7 @@ import "dotenv/config";
 // before the database client handles any query.
 import "temporal-polyfill/full/global";
 import postgres from "@prisma/orm-postgres/runtime";
-import type { Contract } from "./contract";
+import type { Contract } from "./contract.js";
 import contractJson from "./contract.json" with { type: "json" };
 
 export const db = postgres<Contract>({

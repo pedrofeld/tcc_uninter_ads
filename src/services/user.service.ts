@@ -1,6 +1,6 @@
-import type { UserDTO } from '../dtos/user.dto';
-import { UserRepository } from '../database/user.repository';
-import { handleError } from '../config/error.handler';
+import type { UserDTO } from '../dtos/user.dto.js';
+import { UserRepository } from '../database/user.repository.js';
+import { handleError } from '../config/error.handler.js';
 
 export class UserService {
     private userRepository = new UserRepository();

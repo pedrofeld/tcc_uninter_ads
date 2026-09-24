@@ -1,6 +1,6 @@
-import { db } from '../../prisma/db';
-import bcrypt = require('bcrypt');
-import type { UserDTO } from '../dtos/user.dto';
+import { db } from '../../prisma/db.js';
+import bcrypt from 'bcrypt';
+import type { UserDTO } from '../dtos/user.dto.js';
 
 export class UserRepository {
     public async findAll() {
