@@ -58,15 +58,22 @@ export class ProjectRepository {
                         projectImageUrl: data.projectImageUrl ?? null,
                     });
 
+                if (!project) {
+                    throw new Error('Project not found');
+                }
+
                 const typesOfSupportSought = [...new Set(data.typesOfSupportSought)];
 
-                await tx.orm.public.ProjectSupport
-                    .where({projectId: id})
-                    .delete();
+                const deleteSupportsPlan = tx.sql.public.project_supports
+                    .delete()
+                    .where((fields, fns) => fns.eq(fields.projectId, project.id))
+                    .build();
+
+                await tx.execute(deleteSupportsPlan);
 
                 for (const type of typesOfSupportSought) {
                     await tx.orm.public.ProjectSupport.create({
-                        projectId: id,
+                        projectId: project.id,
                         type,
                     });
                 }
